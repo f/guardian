@@ -4,20 +4,17 @@ require "option_parser"
 require "colorize"
 
 module Guardian
-
   class WatcherYML
     YAML.mapping({
       files: String,
-      run: String
+      run:   String,
     })
   end
 
   class Watcher
-
     setter files
 
     def initialize
-
       if ARGV.includes? "init"
         init_yml_files
         exit 0
@@ -154,7 +151,6 @@ run: echo "File is changed %file%"
 YAML
       end
     end
-
   end
 end
 
