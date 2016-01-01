@@ -1,6 +1,6 @@
 # 💂 Guardian.cr
 
-Guardian is a file guardian that wathcing files of your project and run assigned tasks.
+Guardian is a file guardian that watching files of your project and run assigned tasks.
 
 ![Guardian](http://i.imgur.com/mUzv2DL.gif)
 
