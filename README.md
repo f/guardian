@@ -1,4 +1,4 @@
-# Guardian.cr
+# 💂 Guardian.cr
 
 Guardian is a file guardian that wathcing files of your project and run assigned tasks.
 
