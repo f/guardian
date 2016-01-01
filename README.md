@@ -2,7 +2,7 @@
 
 Guardian is a file guardian that wathcing files of your project and run assigned tasks.
 
-![Guardian]http://i.imgur.com/mUzv2DL.gif[/img]
+![Guardian](http://i.imgur.com/mUzv2DL.gif)
 
 ## Installation
 
