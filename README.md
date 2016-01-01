@@ -60,7 +60,7 @@ Simply it has **YAML documents** with seperated by `---` line and each document 
 
 `files` key needs a glob pattern, and `run` is a shell command what to run.
 
-```
+```yaml
 files: ./**/*.cr
 run: crystal build ./src/guardian.cr
 ---
@@ -72,7 +72,7 @@ run: crystal deps
 
 Guardian replaces `%file%` variable in commands with the changed file.
 
-```
+```yaml
 files: ./**/*.txt
 run: echo "%file% is changed"
 ```
