@@ -25,6 +25,7 @@ module Guardian
 
       file = "./.guardian.yml"
 
+      @files = [] of String
       @runners = {} of String => Array(String)
       @timestamps = {} of String => String
 
@@ -46,7 +47,8 @@ module Guardian
     def start_watching
       puts "💂  #{"Guardian is on duty!".colorize(:green)}"
       loop do
-        watch
+        watch_changes
+        watch_newfiles
         sleep 1
       end
     end
@@ -56,12 +58,14 @@ module Guardian
     end
 
     def collect_files
+      @files = [] of String
       @runners = {} of String => Array(String)
       @timestamps = {} of String => String
 
       @watchers.each do |watcher|
         Dir.glob(watcher.files) do |file|
           unless File.executable? file
+            @files << file
             @timestamps[file] = file_creation_date(file)
 
             unless @runners.has_key? file
@@ -85,7 +89,7 @@ module Guardian
       end
     end
 
-    def watch
+    def watch_changes
       @timestamps.each do |file, file_time|
         begin
           check_time = file_creation_date(file)
@@ -100,8 +104,29 @@ module Guardian
           end
         rescue
           puts "#{"-".colorize(:red)} #{file}"
+          @timestamps.delete file
           run_tasks file
           collect_files
+        end
+      end
+    end
+
+    def watch_newfiles
+      files = [] of String
+      @watchers.each do |watcher|
+        Dir.glob(watcher.files) do |file|
+          unless File.executable? file
+            files << file
+          end
+        end
+      end
+
+      if files.size != @files.size
+        new_files = files - @files
+        new_files.each do |file|
+          puts "#{"+".colorize(:green)} #{file}"
+          collect_files
+          run_tasks file
         end
       end
     end
