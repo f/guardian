@@ -36,7 +36,7 @@ Created .guardian.yml of ./src/yourlib.cr
 
 ### Non-Crystal Libs
 
-You can use Guardian for another projects.
+You can use Guardian for other projects.
 
 ```bash
 $ guardian init
