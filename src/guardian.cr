@@ -78,7 +78,7 @@ module Guardian
     def run_tasks(file)
       @runners[file].each do |command|
         command = command.gsub(/%file%/, file)
-        puts "#{"$".colorize(:dark_gray)} #{command.colorize(:dark_gray)}"
+        puts "#{"$".colorize(:dark_gray)} #{command.colorize(:red)}"
         output = `#{command}`
         output.lines.each do |line|
           puts "#{">".colorize(:dark_gray)}    #{line.gsub(/\n$/, "").colorize(:dark_gray)}"
@@ -95,15 +95,25 @@ module Guardian
               puts "#{"+".colorize(:green)} #{file}/"
             else
               puts "#{"±".colorize(:yellow)} #{file}"
+              is_git = File.exists? "./.git/config"
+              if is_git
+                git = `which git`.chomp
+                unless git.empty?
+                  git_stat = `#{git} diff --shortstat -- #{file}`
+                  git_stat = git_stat
+                    .gsub(/\d+ files? changed,\s+/, "")
+                    .gsub(/^\s+|\s+$/, "")
+                  puts "#{"└".colorize(:yellow)} #{git_stat.colorize(:dark_gray)}" unless git_stat.empty?
+                end
+              end
             end
+            @timestamps[file] = check_time
             run_tasks file
-            collect_files
           end
         rescue
           puts "#{"-".colorize(:red)} #{file}"
           @timestamps.delete file
           run_tasks file
-          collect_files
         end
       end
     end
