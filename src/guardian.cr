@@ -112,8 +112,8 @@ module Guardian
           end
         rescue
           puts "#{"-".colorize(:red)} #{file}"
-          @timestamps.delete file
           run_tasks file
+          collect_files
         end
       end
     end
