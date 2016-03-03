@@ -29,7 +29,7 @@ module Guardian
       @watchers = [] of WatcherYML
 
       if File.exists? file
-        YAML.load_all(File.read(file)).each do |yaml|
+        YAML.parse_all(File.read(file)).each do |yaml|
           @watchers << WatcherYML.from_yaml(yaml.to_yaml)
         end
       else
