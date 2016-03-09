@@ -1,6 +1,6 @@
 # 💂 Guardian.cr
 
-Guardian watches over your files and run assigned tasks.
+Guardian watches over your files and runs assigned tasks.
 
 ![Guardian](http://i.imgur.com/mUzv2DL.gif)
 
