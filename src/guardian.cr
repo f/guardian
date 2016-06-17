@@ -1,3 +1,3 @@
 require "./guardian/*"
 
-Guardian::Watcher.new
+Guardian::Watcher.new(ARGV)

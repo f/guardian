@@ -13,8 +13,8 @@ module Guardian
   class Watcher
     setter files
 
-    def initialize
-      if ARGV.includes? "init"
+    def initialize(args)
+      if args.includes? "init"
         init_yml_files
         exit 0
       end
