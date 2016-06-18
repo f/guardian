@@ -1,5 +1,4 @@
 require "yaml"
-require "option_parser"
 require "colorize"
 
 module Guardian
@@ -13,8 +12,8 @@ module Guardian
   class Watcher
     setter files
 
-    def initialize(args)
-      if args.includes? "init"
+    def initialize(init)
+      if init
         init_yml_files
         exit 0
       end
