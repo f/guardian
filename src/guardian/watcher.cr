@@ -146,7 +146,7 @@ module Guardian
         puts "Created #{".guardian.yml".colorize(:green)} of #{file.colorize(:green)}"
         File.write "./.guardian.yml", <<-YAML
 files: ./**/*.cr
-run: crystal build #{file}
+run: crystal compile #{file}
 ---
 files: ./shard.yml
 run: crystal deps
