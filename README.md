@@ -17,7 +17,7 @@ brew install guardian
 
 ```bash
 git clone https://github.com/f/guardian.git && cd guardian
-crystal build src/guardian.cr --release
+crystal compile src/guardian.cr --release
 ```
 
 ## Quickstart
@@ -62,7 +62,7 @@ Simply it has **YAML documents** with seperated by `---` line and each document 
 
 ```yaml
 files: ./**/*.cr
-run: crystal build ./src/guardian.cr
+run: crystal compile ./src/guardian.cr
 ---
 files: ./shard.yml
 run: crystal deps
