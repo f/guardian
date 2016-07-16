@@ -11,6 +11,7 @@ Guardian watches over your files and runs assigned tasks.
 ```bash
 brew tap f/guardian
 brew install guardian
+brew install libpcl
 ```
 
 ### From Source
