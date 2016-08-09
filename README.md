@@ -83,7 +83,7 @@ Think you have a `hello.txt` in your directory, and Guardian will run `echo "hel
 
 ```bash
 $ guardian
-💂Guardian is on duty!
+💂 Guardian is on duty!
 ```
 
 ## Contributing
