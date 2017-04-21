@@ -4,4 +4,8 @@ version: 0.0.3
 authors:
   - Fatih Kadir Akın <fakin@protel.com.tr>
 
+targets:
+  guardian:
+    main: src/guardian.cr
+
 license: MIT
