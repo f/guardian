@@ -17,6 +17,17 @@ else
       puts "Guardian (#{Guardian::VERSION})"
       exit
     end
+  
+    options.on "-h", "--help", "Shows the help" do
+      puts options
+      exit      
+    end
+
+    options.invalid_option do
+      puts options
+      exit
+    end
+
   end
 end
 
