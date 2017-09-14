@@ -30,7 +30,7 @@ library you use.
 ```bash
 $ crystal init lib yourlib
 $ cd yourlib
-$ guardian init
+$ guardian --init
 Created .guardian.yml of ./src/yourlib.cr
 ```
 
@@ -39,14 +39,14 @@ Created .guardian.yml of ./src/yourlib.cr
 You can use Guardian for other projects.
 
 ```bash
-$ guardian init
+$ guardian --init
 Created .guardian.yml
 ```
 
 ## Usage
 
 ```bash
-$ guardian init
+$ guardian --init
 ```
 
 It will create a `.guardian.yml` file to use by Guardian.
