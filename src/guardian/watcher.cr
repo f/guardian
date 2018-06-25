@@ -43,7 +43,7 @@ module Guardian
     end
 
     def file_creation_date(file : String)
-      File.stat(file).mtime.to_s("%Y%m%d%H%M%S")
+      File.info(file).modification_time.to_s("%Y%m%d%H%M%S")
     end
 
     def collect_files
