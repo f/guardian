@@ -1,8 +1,9 @@
 name: guardian
-version: 0.0.3
+version: 0.0.5
 
 authors:
   - Fatih Kadir Akın <fakin@protel.com.tr>
+  - f1refly <f1refly@airmail.cc>
 
 targets:
   guardian:
