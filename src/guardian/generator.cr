@@ -15,7 +15,7 @@ module Guardian
         puts "Created #{".guardian.yml".colorize(:green)} for make"
         File.write "./.guardian.yml", <<-YAML
 files: ./**/*
-run: make
+run: make build
 YAML
       elsif file && File.exists? file
         puts "Created #{".guardian.yml".colorize(:green)} of #{file.colorize(:green)}"
