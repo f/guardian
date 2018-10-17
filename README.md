@@ -13,6 +13,11 @@ brew tap f/guardian
 brew install guardian
 ```
 
+### Arch Linux
+
+Guardian is availabe as a package from the Arch User Repository 
+called [guardian-git](https://aur.archlinux.org/packages/guardian-git/)
+
 ### From Source
 
 ```bash
