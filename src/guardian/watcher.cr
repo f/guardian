@@ -1,5 +1,6 @@
 require "yaml"
 require "colorize"
+require "file"
 
 module Guardian
   class WatcherYML
@@ -17,7 +18,7 @@ module Guardian
 
       @files = [] of String
       @runners = {} of String => Array(String)
-      @timestamps = {} of String => String
+      @timestamps = {} of String => Time
       @watchers = [] of WatcherYML
 
       if File.exists? file
@@ -43,13 +44,13 @@ module Guardian
     end
 
     def file_creation_date(file : String)
-      File.info(file).modification_time.to_s("%Y%m%d%H%M%S")
+      stat = File.info(file).modification_time
     end
 
     def collect_files
       @files = [] of String
       @runners = {} of String => Array(String)
-      @timestamps = {} of String => String
+      @timestamps = {} of String => Time
 
       @watchers.each do |watcher|
         Dir.glob(watcher.files) do |file|
