@@ -13,7 +13,7 @@ module Guardian
   class Watcher
     setter files
 
-    def initialize
+    def initialize(@ignore_executables = true)
       file = "./.guardian.yml"
 
       @files = [] of String
@@ -32,6 +32,13 @@ module Guardian
 
       collect_files
       start_watching
+    end
+
+    def watch_file?(file)
+      if @ignore_executables
+        return !File.executable? file
+      end
+      return true
     end
 
     def start_watching
@@ -54,7 +61,7 @@ module Guardian
 
       @watchers.each do |watcher|
         Dir.glob(watcher.files) do |file|
-          unless File.executable? file
+          if watch_file? file
             @files << file
             @timestamps[file] = file_creation_date(file)
 
@@ -115,7 +122,7 @@ module Guardian
       files = [] of String
       @watchers.each do |watcher|
         Dir.glob(watcher.files) do |file|
-          unless File.executable? file
+          if watch_file? file
             files << file
           end
         end
