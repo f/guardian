@@ -1,6 +1,7 @@
 require "./guardian/*"
 require "option_parser"
 
+ignore_executables = true
 case ARGV[0]?
 when "init"
   puts "\"init\" has been deprecated please use: -i or --init"
@@ -23,6 +24,10 @@ else
       exit      
     end
 
+    options.on "-e", "--watch-executables", "Include files marked as executable" do 
+      ignore_executables = false
+    end
+
     options.invalid_option do
       puts options
       exit
@@ -31,4 +36,4 @@ else
   end
 end
 
-Guardian::Watcher.new
+Guardian::Watcher.new ignore_executables
