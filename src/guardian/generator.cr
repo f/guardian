@@ -24,7 +24,7 @@ files: ./**/*.cr
 run: crystal build #{file}
 ---
 files: ./shard.yml
-run: crystal deps
+run: shards install
 YAML
       else
         puts "Created #{".guardian.yml".colorize(:green)}"

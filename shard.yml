@@ -9,4 +9,6 @@ targets:
   guardian:
     main: src/guardian.cr
 
+crystal: 0.31.1
+
 license: MIT
