@@ -70,7 +70,7 @@ files: ./**/*.cr
 run: crystal build ./src/guardian.cr
 ---
 files: ./shard.yml
-run: crystal deps
+run: shards install
 ```
 
 ### `%file%` Variable
