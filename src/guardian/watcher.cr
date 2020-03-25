@@ -78,10 +78,10 @@ module Guardian
     def run_tasks(file)
       @runners[file].each do |command|
         command = command.gsub(/%file%/, file)
-        puts "#{"$".colorize(:dark_gray)} #{command.colorize(:red)}"
+        puts "#{"$".colorize(:dark_gray)} #{command.colorize(:cyan)}"
         output = `#{command}`
         output.lines.each do |line|
-          puts "#{">".colorize(:dark_gray)}    #{line.gsub(/\n$/, "").colorize(:dark_gray)}"
+          puts "  #{line.gsub(/\n$/, "").colorize(:dark_gray)}"
         end
       end
     end
