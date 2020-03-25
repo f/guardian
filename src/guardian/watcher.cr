@@ -14,7 +14,7 @@ module Guardian
     setter files
 
     def initialize(@ignore_executables = true)
-      file = "./.guardian.yml"
+      file = "./guardian.yml"
 
       @files = [] of String
       @runners = {} of String => Array(String)
@@ -26,7 +26,7 @@ module Guardian
           @watchers << WatcherYML.from_yaml(yaml.to_yaml)
         end
       else
-        puts "#{".guardian.yml".colorize(:red)} does not exists!"
+        puts "#{"guardian.yml".colorize(:red)} does not exists!"
         exit 1
       end
 
@@ -78,7 +78,6 @@ module Guardian
     def run_tasks(file)
       @runners[file].each do |command|
         command = command.gsub(/%file%/, file)
-        puts "#{"$".colorize(:dark_gray)} #{command.colorize(:cyan)}"
         output = `#{command}`
         output.lines.each do |line|
           puts "  #{line.gsub(/\n$/, "").colorize(:dark_gray)}"

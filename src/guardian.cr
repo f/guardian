@@ -10,7 +10,7 @@ when "init"
   exit
 else
   OptionParser.parse do |options|
-    options.on "-i", "--init", "Generates the .guardian.yml file" do
+    options.on "-i", "--init", "Generates the guardian.yml file" do
       Guardian::Generator.new.generate
       exit
     end

@@ -36,7 +36,7 @@ library you use.
 $ crystal init lib yourlib
 $ cd yourlib
 $ guardian --init
-Created .guardian.yml of ./src/yourlib.cr
+Created guardian.yml of ./src/yourlib.cr
 ```
 
 ### Non-Crystal Libs
@@ -45,7 +45,7 @@ You can use Guardian for other projects.
 
 ```bash
 $ guardian --init
-Created .guardian.yml
+Created guardian.yml
 ```
 
 ## Usage
@@ -54,11 +54,11 @@ Created .guardian.yml
 $ guardian --init
 ```
 
-It will create a `.guardian.yml` file to use by Guardian.
+It will create a `guardian.yml` file to use by Guardian.
 
-## `.guardian.yml`
+## `guardian.yml`
 
-`.guardian.yml` is a simple YAML file.
+`guardian.yml` is a simple YAML file.
 
 Simply it has **YAML documents** with seperated by `---` line and each document has
 `files` and `run` keys.
