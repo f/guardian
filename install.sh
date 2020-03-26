@@ -1,4 +1,4 @@
 #!/bin/bash
 
 # for linux users
-cp ./bin/guardian /usr/bin/guardian
+cp ./guardian /usr/bin/guardian

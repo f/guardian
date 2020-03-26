@@ -21,12 +21,12 @@ module Guardian
       @timestamps = {} of String => Time
       @watchers = [] of WatcherYML
 
-      if File.exists? file
+      if File.exists?(file) || File.exists?(file = file.insert(2, '.'))
         YAML.parse_all(File.read(file)).each do |yaml|
           @watchers << WatcherYML.from_yaml(yaml.to_yaml)
         end
       else
-        puts "#{"guardian.yml".colorize(:red)} does not exists!"
+        puts "#{"guardian.yml".colorize(:red)} does not exist!"
         exit 1
       end
 
