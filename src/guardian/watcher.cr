@@ -14,19 +14,19 @@ module Guardian
     setter files
 
     def initialize(@ignore_executables = true)
-      file = "./.guardian.yml"
+      file = "./guardian.yml"
 
       @files = [] of String
       @runners = {} of String => Array(String)
       @timestamps = {} of String => Time
       @watchers = [] of WatcherYML
 
-      if File.exists? file
+      if File.exists?(file) || File.exists?(file = file.insert(2, '.'))
         YAML.parse_all(File.read(file)).each do |yaml|
           @watchers << WatcherYML.from_yaml(yaml.to_yaml)
         end
       else
-        puts "#{".guardian.yml".colorize(:red)} does not exists!"
+        puts "#{"guardian.yml".colorize(:red)} does not exist!"
         exit 1
       end
 
