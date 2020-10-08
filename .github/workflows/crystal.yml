@@ -18,5 +18,5 @@ jobs:
     - uses: actions/checkout@v2
     - name: Install dependencies
       run: shards install
-    - name: Run tests
+    - name: Run build
       run: crystal build src/guardian.cr
