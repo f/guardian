@@ -4,11 +4,13 @@ require "file"
 
 module Guardian
   class WatcherYML
-    YAML.mapping({
-      files: String,
-      run:   String,
-    })
+    include YAML::Serializable
+
+    property files : String
+    property run : String
   end
+
+
 
   class Watcher
     setter files

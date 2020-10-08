@@ -1,5 +1,5 @@
 name: guardian
-version: 0.0.5
+version: 0.0.6
 
 authors:
   - Fatih Kadir Akın <fakin@protel.com.tr>
@@ -9,6 +9,6 @@ targets:
   guardian:
     main: src/guardian.cr
 
-crystal: 0.33.0
+crystal: 0.35.1
 
 license: MIT
