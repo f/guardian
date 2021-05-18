@@ -15,7 +15,7 @@ module Guardian
   class Watcher
     setter files
 
-    def initialize(@ignore_executables = true)
+    def initialize(@ignore_executables = true, @clear_on_action = false)
       file = "./guardian.yml"
 
       @files = [] of String
@@ -45,6 +45,7 @@ module Guardian
 
     def start_watching
       puts "💂  #{"Guardian is on duty!".colorize(:green)}"
+      maybe_clear
       loop do
         watch_changes
         watch_newfiles
@@ -93,6 +94,7 @@ module Guardian
         begin
           check_time = file_creation_date(file)
           if check_time != file_time
+            maybe_clear
             if File.directory? file
               puts "#{"+".colorize(:green)} #{file}/"
             else
@@ -132,12 +134,18 @@ module Guardian
 
       if files.size != @files.size
         new_files = files - @files
+        maybe_clear
         new_files.each do |file|
           puts "#{"+".colorize(:green)} #{file}"
           collect_files
           run_tasks file
         end
       end
+    end
+
+    private def maybe_clear
+      return unless @clear_on_action
+      system "clear"
     end
   end
 end

@@ -3,6 +3,7 @@ require "option_parser"
 require "colorize"
 
 ignore_executables = true
+clear_on_action = false
 case ARGV[0]?
 when "init"
   puts "\"init\" has been deprecated please use: -i or --init"
@@ -33,6 +34,10 @@ else
       Colorize.enabled = false
     end
 
+    options.on "-c", "--clear", "Clear terminal before each action" do
+      clear_on_action = true
+    end
+
     options.invalid_option do
       puts options
       exit
@@ -40,4 +45,4 @@ else
   end
 end
 
-Guardian::Watcher.new ignore_executables
+Guardian::Watcher.new ignore_executables, clear_on_action
