@@ -75,14 +75,14 @@ run: shards install
 
 ### `%file%` Variable
 
-Guardian replaces `%file%` variable in commands with the changed file.
+Guardian replaces `%file%` variable in commands with the changed file(s).
 
 ```yaml
 files: ./**/*.txt
 run: echo "%file% is changed"
 ```
 
-Think you have a `hello.txt` in your directory, and Guardian will run `echo "hello.txt is changed"` command when it's changed.
+Think you have a `hello.txt` & `goodbye.txt` in your directory, and Guardian will run `echo "hello.txt goodbye.txt is changed"` command when it's changed.
 
 ## Running Guardian
 

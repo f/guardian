@@ -9,6 +9,11 @@ targets:
   guardian:
     main: src/guardian.cr
 
+dependencies:
+  pty:
+    github: crystal-posix/pty.cr
+    branch: main
+
 crystal: 0.35.1
 
 license: MIT
