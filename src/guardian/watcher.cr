@@ -1,6 +1,7 @@
 require "yaml"
 require "colorize"
 require "file"
+require "./command_run"
 
 module Guardian
   class WatcherYML
@@ -8,21 +9,28 @@ module Guardian
 
     property files : String
     property run : String
+    property missing_files = "remove"
+
+    @[YAML::Field(ignore: true)]
+    @command : CommandRun?
+
+    def command
+      @command ||= CommandRun.new(run, missing_files)
+    end
   end
 
-
-
   class Watcher
-    setter files
+    @files = Set(String).new
+    @runners = Hash(String, Set(CommandRun)).new { |h, k| h[k] = Set(CommandRun).new }
+    @timestamps = {} of String => Time
+    @watchers = [] of WatcherYML
 
-    def initialize(@ignore_executables = true, @clear_on_action = false)
-      file = "./guardian.yml"
+    @task_queue = Set(CommandRun).new
 
-      @files = [] of String
-      @runners = {} of String => Array(String)
-      @timestamps = {} of String => Time
-      @watchers = [] of WatcherYML
+    @shutdown = false
 
+    def initialize(@ignore_executables = true, @verbose = 0, @clear_on_action = false)
+      file = "guardian.yml"
       if File.exists?(file) || File.exists?(file = file.insert(2, '.'))
         YAML.parse_all(File.read(file)).each do |yaml|
           @watchers << WatcherYML.from_yaml(yaml.to_yaml)
@@ -31,7 +39,9 @@ module Guardian
         puts "#{"guardian.yml".colorize(:red)} does not exist!"
         exit 1
       end
+    end
 
+    def run
       collect_files
       start_watching
     end
@@ -49,7 +59,11 @@ module Guardian
       loop do
         watch_changes
         watch_newfiles
+        break if @shutdown
+        run_tasks
+        break if @shutdown
         sleep 1
+        break if @shutdown
       end
     end
 
@@ -58,9 +72,9 @@ module Guardian
     end
 
     def collect_files
-      @files = [] of String
-      @runners = {} of String => Array(String)
-      @timestamps = {} of String => Time
+      @files.clear
+      @runners.clear
+      @timestamps.clear
 
       @watchers.each do |watcher|
         Dir.glob(watcher.files) do |file|
@@ -68,25 +82,40 @@ module Guardian
             @files << file
             @timestamps[file] = file_creation_date(file)
 
-            unless @runners.has_key? file
-              @runners[file] = [watcher.run]
-            else
-              @runners[file] << watcher.run
-            end
+            puts "runner #{file.inspect} -> #{watcher.run.inspect} #{@runners[file].size}" if @verbose > 0
+            @runners[file] << watcher.command
           end
         end
       end
     end
 
-    def run_tasks(file)
-      @runners[file].each do |command|
-        command = command.gsub(/%file%/, file)
-        puts "#{"$".colorize(:dark_gray)} #{command.colorize(:cyan)}"
-        output = `#{command}`
-        output.lines.each do |line|
-          puts "  #{line.gsub(/\n$/, "").colorize(:dark_gray)}"
-        end
+    # Multiple files may trigger the same command
+    # Queue and dedup them
+    private def queue_tasks(file)
+      commands = @runners[file]
+      commands.each do |command|
+        command.enqueue file
+        @task_queue << command
       end
+    end
+
+    private def run_tasks : Nil
+      return if @task_queue.empty?
+
+      errors = 0
+      @task_queue.each do |command|
+        success = command.run
+        errors += 1 unless success
+        break if @shutdown
+      end
+
+      if errors == 0
+        puts "◼".colorize(:dark_gray)
+      else
+        puts "#{"◼".colorize(:red)} errors=#{errors}"
+      end
+    ensure
+      @task_queue.clear
     end
 
     def watch_changes
@@ -112,18 +141,18 @@ module Guardian
               end
             end
             @timestamps[file] = check_time
-            run_tasks file
+            queue_tasks file
           end
         rescue
           puts "#{"-".colorize(:red)} #{file}"
-          run_tasks file
+          queue_tasks file
           collect_files
         end
       end
     end
 
     def watch_newfiles
-      files = [] of String
+      files = Set(String).new
       @watchers.each do |watcher|
         Dir.glob(watcher.files) do |file|
           if watch_file? file
@@ -138,7 +167,7 @@ module Guardian
         new_files.each do |file|
           puts "#{"+".colorize(:green)} #{file}"
           collect_files
-          run_tasks file
+          queue_tasks file
         end
       end
     end
@@ -146,6 +175,16 @@ module Guardian
     private def maybe_clear
       return unless @clear_on_action
       system "clear"
+    end
+
+    def shutdown
+      puts "shutting down" if @verbose > 0
+      @shutdown = true
+    end
+
+    def close
+      # Cleanup temp files
+      @watchers.each &.command.close
     end
   end
 end

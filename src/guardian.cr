@@ -4,6 +4,7 @@ require "colorize"
 
 ignore_executables = true
 clear_on_action = false
+verbose = 0
 case ARGV[0]?
 when "init"
   puts "\"init\" has been deprecated please use: -i or --init"
@@ -38,6 +39,10 @@ else
       clear_on_action = true
     end
 
+    options.on "--verbose", "More logging" do
+      verbose += 1
+    end
+
     options.invalid_option do
       puts options
       exit
@@ -45,4 +50,13 @@ else
   end
 end
 
-Guardian::Watcher.new ignore_executables, clear_on_action
+watcher = Guardian::Watcher.new ignore_executables, verbose, clear_on_action
+Signal::HUP.trap { watcher.shutdown }
+Signal::QUIT.trap { watcher.shutdown }
+Signal::TERM.trap { watcher.shutdown }
+begin
+  watcher.run
+ensure
+  watcher.close
+  # puts Dir.glob("/tmp/guardian*")
+end
