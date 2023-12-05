@@ -10,37 +10,45 @@ module Guardian
     property run : String
   end
 
-
-
   class Watcher
     setter files
+    LOCAL_FILE = "./guardian.yml"
+    HOME_FILE  = "#{Path.home}/guardian.yml"
+    ENV_FILE   = "GUARDIAN_FILE"
 
     def initialize(@ignore_executables = true, @clear_on_action = false)
-      file = "./guardian.yml"
+      file = guardian_file
 
       @files = [] of String
       @runners = {} of String => Array(String)
       @timestamps = {} of String => Time
       @watchers = [] of WatcherYML
 
-      if File.exists?(file) || File.exists?(file = file.insert(2, '.'))
+      if file.nil?
+        puts "Guardian file not found. you can create local file with `guardian -i`"
+        exit 1
+      else
+        puts "Guardian file found : #{file}"
         YAML.parse_all(File.read(file)).each do |yaml|
           @watchers << WatcherYML.from_yaml(yaml.to_yaml)
         end
-      else
-        puts "#{"guardian.yml".colorize(:red)} does not exist!"
-        exit 1
       end
 
       collect_files
       start_watching
     end
 
+    def guardian_file
+      return LOCAL_FILE if File.exists?(LOCAL_FILE)
+      return ENV[ENV_FILE] if ENV[ENV_FILE]? && File.exists?(ENV[ENV_FILE])
+      return HOME_FILE if File.exists?(HOME_FILE)
+    end
+
     def watch_file?(file)
       if @ignore_executables
         return !File.executable? file
       end
-      return true
+      true
     end
 
     def start_watching
@@ -54,7 +62,7 @@ module Guardian
     end
 
     def file_creation_date(file : String)
-      stat = File.info(file).modification_time
+      File.info(file).modification_time
     end
 
     def collect_files
@@ -68,10 +76,10 @@ module Guardian
             @files << file
             @timestamps[file] = file_creation_date(file)
 
-            unless @runners.has_key? file
-              @runners[file] = [watcher.run]
-            else
+            if @runners.has_key? file
               @runners[file] << watcher.run
+            else
+              @runners[file] = [watcher.run]
             end
           end
         end
