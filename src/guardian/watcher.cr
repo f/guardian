@@ -10,8 +10,6 @@ module Guardian
     property run : String
   end
 
-
-
   class Watcher
     setter files
 
