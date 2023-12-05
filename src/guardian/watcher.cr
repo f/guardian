@@ -38,7 +38,7 @@ module Guardian
       if @ignore_executables
         return !File.executable? file
       end
-      return true
+      true
     end
 
     def start_watching
@@ -52,7 +52,7 @@ module Guardian
     end
 
     def file_creation_date(file : String)
-      stat = File.info(file).modification_time
+      File.info(file).modification_time
     end
 
     def collect_files
@@ -66,10 +66,10 @@ module Guardian
             @files << file
             @timestamps[file] = file_creation_date(file)
 
-            unless @runners.has_key? file
-              @runners[file] = [watcher.run]
-            else
+            if @runners.has_key? file
               @runners[file] << watcher.run
+            else
+              @runners[file] = [watcher.run]
             end
           end
         end
